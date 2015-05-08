@@ -4,7 +4,6 @@ __author__, __date__ = 'mehdy', '5/4/15'
 
 from telepy.base import WebSocketHandler
 from telepy.models.room import Room
-import logging
 
 global_rooms = dict()
 
@@ -24,11 +23,11 @@ class EchoWebSocket(WebSocketHandler):
             self.write_message('initiator')
         else:
             self.write_message('not initiator')
-        logging.info(
+        self.application.logger.info(
             'WebSocket connection opened from %s', self.request.remote_ip)
 
     def on_message(self, message):
-        logging.info(
+        self.application.logger.info(
             'Received message from %s: %s', self.request.remote_ip, message)
         for client in self.room.clients:
             if client is self:
@@ -36,5 +35,5 @@ class EchoWebSocket(WebSocketHandler):
             client.write_message(message)
 
     def on_close(self):
-        logging.info('WebSocket connection closed.')
+        self.application.logger.info('WebSocket connection closed.')
         self.room.clients.remove(self)

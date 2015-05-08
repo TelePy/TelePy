@@ -4,10 +4,10 @@
 __author__, __date__ = 'mehdy', '5/4/15'
 
 import click
+from tornado.ioloop import IOLoop
+
 from telepy.app import create_app
 from telepy.config import config
-import logging
-from tornado.ioloop import IOLoop
 
 
 @click.group()
@@ -28,7 +28,7 @@ def run(host, port):
     """
     app = create_app(config)
     app.listen(port=port, address=host)
-    logging.info("Started listening at 127.0.0.1:8080.")
+    app.logger.info("Started listening at 127.0.0.1:8080.")
     IOLoop.instance().start()
 
 
